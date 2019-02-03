@@ -6,7 +6,7 @@ This docker image will contain following software built from source:
 
 * [pkg-config][] v0.29.2
 * [cmake][] v0.13.3
-* [binutils][] v2.31.1
+* [binutils][] v2.32
 * [mingw-w64][] v6.0.0
 * [gcc][] v6.2.0
 * [nasm][] v2.14.02
