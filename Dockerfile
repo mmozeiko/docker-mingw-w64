@@ -10,7 +10,9 @@ ARG BINUTILS_VERSION=2.32
 ARG MINGW_VERSION=6.0.0
 ARG GCC_VERSION=8.3.0
 ARG NASM_VERSION=2.14.02
-ARG NVCC_VERSION=10.0.130
+ARG NVCC_VERSION=10.1.105
+
+SHELL [ "/bin/bash", "-c" ]
 
 RUN set -ex \
     \
@@ -180,11 +182,11 @@ RUN set -ex \
         libtool \
         gcc-7 \
         g++-7 \
-        cuda-nvcc-10-0 \
+        cuda-nvcc-${NVCC_VERSION:0:2}-${NVCC_VERSION:3:1} \
     \
-    && ln -s /usr/bin/gcc-7 /usr/local/cuda-10.0/bin/gcc \
-    && ln -s /usr/bin/g++-7 /usr/local/cuda-10.0/bin/g++ \
-    && ln -s /usr/local/cuda-`echo ${NVCC_VERSION} | cut -b 1-4` /usr/local/cuda \
+    && ln -s /usr/local/cuda-${NVCC_VERSION:0:2}.${NVCC_VERSION:3:1} /usr/local/cuda \
+    && ln -s /usr/bin/gcc-7 /usr/local/cuda/bin/gcc \
+    && ln -s /usr/bin/g++-7 /usr/local/cuda/bin/g++ \
     \
     && apt-get remove --purge -y gnupg \
     && apt-get autoremove --purge -y \
