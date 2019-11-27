@@ -5,7 +5,7 @@ WORKDIR /mnt
 ENV MINGW=/mingw
 
 ARG PKG_CONFIG_VERSION=0.29.2
-ARG CMAKE_VERSION=3.15.5
+ARG CMAKE_VERSION=3.16.0
 ARG BINUTILS_VERSION=2.33.1
 ARG MINGW_VERSION=7.0.0
 ARG GCC_VERSION=9.2.0
@@ -23,10 +23,12 @@ RUN set -ex \
         gcc-8 \
         g++-8 \
         zlib1g-dev \
+        libssl-dev \
         libgmp-dev \
         libmpfr-dev \
         libmpc-dev \
         libisl-dev \
+        libssl1.1 \
         libgmp10 \
         libmpfr6 \
         libmpc3 \
@@ -168,7 +170,7 @@ RUN set -ex \
     && rm -r gcc gcc-${GCC_VERSION} \
     && rm -r nasm-${NASM_VERSION} \
     \
-    && apt-get remove --purge -y file gcc-8 g++-8 zlib1g-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev python-lxml python-mako \
+    && apt-get remove --purge -y file gcc-8 g++-8 zlib1g-dev libssl-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev python-lxml python-mako \
     \
     && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub \
     && wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_${NVCC_VERSION}-1_amd64.deb \
