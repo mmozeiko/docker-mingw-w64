@@ -5,8 +5,8 @@ WORKDIR /mnt
 ENV MINGW=/mingw
 
 ARG PKG_CONFIG_VERSION=0.29.2
-ARG CMAKE_VERSION=3.16.0
-ARG BINUTILS_VERSION=2.33.1
+ARG CMAKE_VERSION=3.16.5
+ARG BINUTILS_VERSION=2.34
 ARG MINGW_VERSION=7.0.0
 ARG GCC_VERSION=9.2.0
 ARG NASM_VERSION=2.14.02
@@ -38,6 +38,7 @@ RUN set -ex \
         python-lxml \
         python-mako \
         ninja-build \
+        texinfo \
         meson \
         gnupg \
         bzip2 \
