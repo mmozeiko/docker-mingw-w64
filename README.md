@@ -5,7 +5,7 @@ Builds [mingw-w64][] toolchain in docker for targeting 64-bit Windows from Ubunt
 This docker image will contain following software built from source:
 
 * [pkg-config][] v0.29.2
-* [cmake][] v3.17.2
+* [cmake][] v3.17.3
 * [binutils][] v2.34
 * [mingw-w64][] v7.0.0
 * [gcc][] v10.1.0
