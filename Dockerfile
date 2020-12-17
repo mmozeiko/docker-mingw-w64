@@ -5,12 +5,12 @@ WORKDIR /mnt
 ENV MINGW=/mingw
 
 ARG PKG_CONFIG_VERSION=0.29.2
-ARG CMAKE_VERSION=3.19.1
+ARG CMAKE_VERSION=3.19.2
 ARG BINUTILS_VERSION=2.35.1
 ARG MINGW_VERSION=8.0.0
 ARG GCC_VERSION=10.2.0
 ARG NASM_VERSION=2.15.02
-ARG NVCC_VERSION=11.1.105
+ARG NVCC_VERSION=11.2.0
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -51,6 +51,7 @@ RUN set -ex \
         yasm \
         wget \
         zip \
+        git \
     \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 1000 --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
     \
@@ -177,7 +178,7 @@ RUN set -ex \
     && apt-get remove --purge -y file gcc-10 g++-10 zlib1g-dev libssl-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev python-lxml python-mako \
     \
     && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub \
-    && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
+    && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
     && apt-get update \
     \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
