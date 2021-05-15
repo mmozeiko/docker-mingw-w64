@@ -5,12 +5,12 @@ WORKDIR /mnt
 ENV MINGW=/mingw
 
 ARG PKG_CONFIG_VERSION=0.29.2
-ARG CMAKE_VERSION=3.20.1
+ARG CMAKE_VERSION=3.20.2
 ARG BINUTILS_VERSION=2.36.1
 ARG MINGW_VERSION=8.0.0
-ARG GCC_VERSION=10.3.0
-ARG NASM_VERSION=2.15.02
-ARG NVCC_VERSION=11.2.2
+ARG GCC_VERSION=11.1.0
+ARG NASM_VERSION=2.15.05
+ARG NVCC_VERSION=11.3.0
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -64,6 +64,8 @@ RUN set -ex \
     \
     && wget -q https://raw.githubusercontent.com/msys2/MINGW-packages/master/mingw-w64-gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch -O - | \
         patch -d gcc-${GCC_VERSION} -p 1 \
+    && wget -q https://github.com/mirror/mingw-w64/commit/6a0e9165008f731bccadfc41a59719cf7c8efc02.patch -O - | \
+        patch -d mingw-w64-v${MINGW_VERSION} -p 1 \
     \
     && mkdir -p ${MINGW}/include ${MINGW}/lib/pkgconfig \
     && chmod 0777 -R /mnt ${MINGW} \
