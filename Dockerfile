@@ -5,12 +5,12 @@ WORKDIR /mnt
 ENV MINGW=/mingw
 
 ARG PKG_CONFIG_VERSION=0.29.2
-ARG CMAKE_VERSION=3.21.3
-ARG BINUTILS_VERSION=2.37
+ARG CMAKE_VERSION=3.22.2
+ARG BINUTILS_VERSION=2.38
 ARG MINGW_VERSION=9.0.0
 ARG GCC_VERSION=11.2.0
 ARG NASM_VERSION=2.15.05
-ARG NVCC_VERSION=11.4.2
+ARG NVCC_VERSION=11.6.1
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -109,7 +109,6 @@ RUN set -ex \
         --prefix=/usr/local/x86_64-w64-mingw32 \
         --host=x86_64-w64-mingw32 \
         --enable-sdk=all \
-        --enable-secure-api \
     && make install \
     && cd .. \
     \
@@ -143,7 +142,7 @@ RUN set -ex \
         --enable-wildcard \
         --disable-lib32 \
         --enable-lib64 \
-    && make -j`nproc` \
+    && (make || make || make || make) \
     && make install \
     && cd .. \
     \
