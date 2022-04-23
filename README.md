@@ -5,16 +5,16 @@ Builds [mingw-w64][] toolchain in docker for targeting 64-bit Windows from Ubunt
 This docker image will contain following software built from source:
 
 * [pkg-config][] v0.29.2
-* [cmake][] v3.22.2
+* [cmake][] v3.23.1
 * [binutils][] v2.38
-* [mingw-w64][] v9.0.0
-* [gcc][] v11.2.0
+* [mingw-w64][] v10.0.0
+* [gcc][] v11.3.0
 * [nasm][] v2.15.05
 
 Extra binaries:
 
 * extra Ubuntu packages: `wget`, `patch`, `bison`, `flex`, `yasm`, `make`, `ninja`, `meson`, `zip`.
-* [nvcc][] v11.6.1
+* [nvcc][] v11.6.2
 
 Custom built binaries are installed into `/usr/local` prefix. [pkg-config][] will look for packages in `/mingw` prefix. `nvcc` is available in `/usr/local/cuda/bin` folder.
 
