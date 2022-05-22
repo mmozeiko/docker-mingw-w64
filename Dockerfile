@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 WORKDIR /mnt
 
@@ -8,9 +8,9 @@ ARG PKG_CONFIG_VERSION=0.29.2
 ARG CMAKE_VERSION=3.23.1
 ARG BINUTILS_VERSION=2.38
 ARG MINGW_VERSION=10.0.0
-ARG GCC_VERSION=11.3.0
+ARG GCC_VERSION=12.1.0
 ARG NASM_VERSION=2.15.05
-ARG NVCC_VERSION=11.6.2
+ARG NVCC_VERSION=11.7.0
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -20,23 +20,20 @@ RUN set -ex \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade --no-install-recommends -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
         ca-certificates \
-        gcc-10 \
-        g++-10 \
+        gcc \
+        g++ \
         zlib1g-dev \
         libssl-dev \
         libgmp-dev \
         libmpfr-dev \
         libmpc-dev \
         libisl-dev \
-        libssl1.1 \
+        libssl3 \
         libgmp10 \
         libmpfr6 \
         libmpc3 \
-        libisl22 \
+        libisl23 \
         xz-utils \
-        python \
-        python-lxml \
-        python-mako \
         ninja-build \
         texinfo \
         meson \
@@ -53,17 +50,12 @@ RUN set -ex \
         zip \
         git \
     \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 1000 --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
-    \
     && wget -q https://pkg-config.freedesktop.org/releases/pkg-config-${PKG_CONFIG_VERSION}.tar.gz -O - | tar -xz \
     && wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz -O - | tar -xz \
     && wget -q https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz -O - | tar -xJ \
     && wget -q https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_VERSION}.tar.bz2 -O - | tar -xj \
     && wget -q https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz -O - | tar -xJ \
     && wget -q https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VERSION}/nasm-${NASM_VERSION}.tar.xz -O - | tar -xJ \
-    \
-    && wget -q https://raw.githubusercontent.com/msys2/MINGW-packages/master/mingw-w64-gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch -O - | \
-        patch -d gcc-${GCC_VERSION} -p 1 \
     \
     && mkdir -p ${MINGW}/include ${MINGW}/lib/pkgconfig \
     && chmod 0777 -R /mnt ${MINGW} \
@@ -174,18 +166,17 @@ RUN set -ex \
     && rm -r gcc gcc-${GCC_VERSION} \
     && rm -r nasm-${NASM_VERSION} \
     \
-    && apt-get remove --purge -y file gcc-10 g++-10 zlib1g-dev libssl-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev python-lxml python-mako \
+    && apt-get remove --purge -y file gcc g++ zlib1g-dev libssl-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev \
     \
-    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub \
-    && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
+    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub \
+    && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
     && apt-get update \
     \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
         cuda-nvcc-${NVCC_VERSION:0:2}-${NVCC_VERSION:3:1} \
     \
-    && ln -s /usr/local/cuda-${NVCC_VERSION:0:2}.${NVCC_VERSION:3:1} /usr/local/cuda \
-    && ln -s /usr/bin/gcc-9 /usr/local/cuda/bin/gcc \
-    && ln -s /usr/bin/g++-9 /usr/local/cuda/bin/g++ \
+    && ln -s /usr/bin/gcc /usr/local/cuda/bin/gcc \
+    && ln -s /usr/bin/g++ /usr/local/cuda/bin/g++ \
     \
     && apt-get remove --purge -y gnupg \
     && apt-get autoremove --purge -y \

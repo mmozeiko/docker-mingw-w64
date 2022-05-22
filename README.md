@@ -8,13 +8,13 @@ This docker image will contain following software built from source:
 * [cmake][] v3.23.1
 * [binutils][] v2.38
 * [mingw-w64][] v10.0.0
-* [gcc][] v11.3.0
+* [gcc][] v12.1.0
 * [nasm][] v2.15.05
 
 Extra binaries:
 
 * extra Ubuntu packages: `wget`, `patch`, `bison`, `flex`, `yasm`, `make`, `ninja`, `meson`, `zip`.
-* [nvcc][] v11.6.2
+* [nvcc][] v11.7.0
 
 Custom built binaries are installed into `/usr/local` prefix. [pkg-config][] will look for packages in `/mingw` prefix. `nvcc` is available in `/usr/local/cuda/bin` folder.
 
