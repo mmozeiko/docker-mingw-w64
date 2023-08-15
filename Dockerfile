@@ -16,6 +16,7 @@ SHELL [ "/bin/bash", "-c" ]
 
 RUN set -ex \
     \
+    # Global compilation lib tools
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade --no-install-recommends -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
@@ -50,6 +51,7 @@ RUN set -ex \
         zip \
         git \
     \
+    # Download source code for PKG_CONFIG, CMAKE, BINUTILS, MINGW, GCC and NASM
     && wget -q https://pkg-config.freedesktop.org/releases/pkg-config-${PKG_CONFIG_VERSION}.tar.gz -O - | tar -xz \
     && wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz -O - | tar -xz \
     && wget -q https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz -O - | tar -xJ \
@@ -60,6 +62,7 @@ RUN set -ex \
     && mkdir -p ${MINGW}/include ${MINGW}/lib/pkgconfig \
     && chmod 0777 -R /mnt ${MINGW} \
     \
+    # Install PKG_CONFIG
     && cd pkg-config-${PKG_CONFIG_VERSION} \
     && ./configure \
         --prefix=/usr/local \
@@ -71,6 +74,7 @@ RUN set -ex \
     && make install \
     && cd .. \
     \
+    # Install CMAKE
     && cd cmake-${CMAKE_VERSION} \
     && ./configure \
         --prefix=/usr/local \
@@ -79,6 +83,7 @@ RUN set -ex \
     && make install \
     && cd .. \
     \
+    # Install BINUTILS
     && cd binutils-${BINUTILS_VERSION} \
     && ./configure \
         --prefix=/usr/local \
@@ -95,6 +100,7 @@ RUN set -ex \
     && make install \
     && cd .. \
     \
+    # Install MINGW headers
     && mkdir mingw-w64 \
     && cd mingw-w64 \
     && ../mingw-w64-v${MINGW_VERSION}/mingw-w64-headers/configure \
@@ -104,6 +110,7 @@ RUN set -ex \
     && make install \
     && cd .. \
     \
+    # Install GCC
     && mkdir gcc \
     && cd gcc \
     && ../gcc-${GCC_VERSION}/configure \
@@ -127,6 +134,7 @@ RUN set -ex \
     && make install-gcc \
     && cd .. \
     \
+    # Install MINGW crt
     && cd mingw-w64 \
     && ../mingw-w64-v${MINGW_VERSION}/mingw-w64-crt/configure \
         --prefix=/usr/local/x86_64-w64-mingw32 \
@@ -138,6 +146,7 @@ RUN set -ex \
     && make install \
     && cd .. \
     \
+    # Install MINGW winpthreads
     && cd mingw-w64 \
     && ../mingw-w64-v${MINGW_VERSION}/mingw-w64-libraries/winpthreads/configure \
         --prefix=/usr/local/x86_64-w64-mingw32 \
@@ -148,17 +157,20 @@ RUN set -ex \
     && make install \
     && cd .. \
     \
+    # Recompile GCC
     && cd gcc \
     && make -j`nproc` \
     && make install \
     && cd .. \
     \
+    # Install NASM
     && cd nasm-${NASM_VERSION} \
     && ./configure --prefix=/usr/local \
     && make -j`nproc` \
     && make install \
     && cd .. \
     \
+    # Clean up downloaded source files
     && rm -r pkg-config-${PKG_CONFIG_VERSION} \
     && rm -r cmake-${CMAKE_VERSION} \
     && rm -r binutils-${BINUTILS_VERSION} \
@@ -166,8 +178,10 @@ RUN set -ex \
     && rm -r gcc gcc-${GCC_VERSION} \
     && rm -r nasm-${NASM_VERSION} \
     \
+    # Clean ubuntu apt packages
     && apt-get remove --purge -y file gcc g++ zlib1g-dev libssl-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev \
     \
+    # Install NVCC with APT
     && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub \
     && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
     && apt-get update \
@@ -175,9 +189,11 @@ RUN set -ex \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
         cuda-nvcc-${NVCC_VERSION:0:2}-${NVCC_VERSION:3:1} \
     \
+    # Configure GCC / G++ installed version
     && ln -s /usr/bin/gcc /usr/local/cuda/bin/gcc \
     && ln -s /usr/bin/g++ /usr/local/cuda/bin/g++ \
     \
+    # Final clean up for ubuntu apt packages
     && apt-get remove --purge -y gnupg \
     && apt-get autoremove --purge -y \
     && apt-get clean
