@@ -5,12 +5,12 @@ WORKDIR /mnt
 ENV MINGW=/mingw
 
 ARG PKG_CONFIG_VERSION=0.29.2
-ARG CMAKE_VERSION=3.29.3
-ARG BINUTILS_VERSION=2.42
-ARG MINGW_VERSION=11.0.1
-ARG GCC_VERSION=14.1.0
+ARG CMAKE_VERSION=3.30.4
+ARG BINUTILS_VERSION=2.43
+ARG MINGW_VERSION=12.0.0
+ARG GCC_VERSION=14.2.0
 ARG NASM_VERSION=2.16.03
-ARG NVCC_VERSION=12.4.1
+ARG NVCC_VERSION=12.6.2
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -168,8 +168,8 @@ RUN set -ex \
     \
     && apt-get remove --purge -y file gcc g++ zlib1g-dev libssl-dev libgmp-dev libmpfr-dev libmpc-dev libisl-dev \
     \
-    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub \
-    && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
+    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/3bf863cc.pub \
+    && echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/ /" > /etc/apt/sources.list.d/cuda.list \
     && apt-get update \
     \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
